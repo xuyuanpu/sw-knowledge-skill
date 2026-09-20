@@ -1,78 +1,45 @@
 # 员工接入指南
 
-## 你需要拿到什么
+## 一次配置，之后直接说需求
 
-找知识库管理员拿到四项：
+安装「SW 知识库技能」v2.0.0。再由管理员提供你的个人 MCP 连接令牌，或只属于你的私密连接配置文件。各员工使用独立令牌，不共用负责人连接。
 
-1. `sw-knowledge-upload-workbuddy-v1.1.0.zip`。
-2. 本人的知识库账号或邀请（知识库账号与WorkBuddy账号是两回事）。
-3. 接收库名称、库ID及工作空间ID（如果需要切换工作空间）。
-4. 一份按本人接收库填写的`connection.json`，里面只有库ID、库名和可选空间ID，没有密码。
+在 WorkBuddy 的「插件 → MCP服务器 → 配置MCP」添加远程 Streamable HTTP 服务：
 
-统一网站：https://ai.skillandwill.com 。每个人不需要申请新域名或单独搭服务器；同一网站通过个人账号识别身份。不要互用账号或把管理员API Key发给员工。此包不依赖MCP，也不需要在WorkBuddy填写模型API Key来连接知识库；现有知识库的解析/向量模型由管理员配置。
+- 名称：SW 知识库 / sw-knowledge
+- 地址：`https://ai.skillandwill.com/mcp`
+- 认证请求头：`Authorization: Bearer 你的个人令牌`
 
-## 安装Skill
+令牌填在连接配置的凭证字段，不发到对话里。若界面支持JSON配置，可参考包内 `assets/mcp.example.json`，将占位值替换为个人令牌；手动配置时不保留未解析的占位符。不同 WorkBuddy 版本入口可能不同，传输类型选 Streamable HTTP。
 
-WorkBuddy → 技能 → 添加技能 → 上传技能，选择ZIP，检查通过后启用。新建任务并选择只包含待处理材料的本地工作目录，按客户端提示授权读取该目录。
+若管理员给的是私密JSON配置，可让本机助手将其中 sw-knowledge 条目合并到 `~/.workbuddy/mcp.json`（Windows为用户目录下的.workbuddy/mcp.json），保留其他连接；仅本机文件操作，不将凭证回显到对话、日志或提交GitHub。文件应只对本人可读。此操作不需要手动运行Python或登录命令。
 
-如果企业策略禁用个人安装，请管理员通过企业Skill管理分发，不绕过客户端限制。
+保存并启用连接后，对 WorkBuddy 说：
 
-官方安装依据：[WorkBuddy技能说明](https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Skills-Market)。本包已制作，但不代表已替所有员工安装或完成企业分发。
+> 使用 SW 知识库技能，列出我可以访问的知识库及权限。
 
-## 首次连接（本人操作一次）
+能返回实际库名和权限才算已连接；仅显示Skill已安装不等于连接成功。服务端已通过标准MCP客户端验证，员工自己的 WorkBuddy 客户端仍需执行这一步确认。
 
-1. 浏览器打开SW AI，以本人账号登录，确认能看到分配的接收库。没有账号先联系管理员；注册入口可能受系统设置控制，不保证自行注册就能进入团队库。
-2. 本机需Python 3.10+。在终端运行`python3 --version`；Windows可运行`py -3 --version`。没有时安装Python官方发行版，并重新打开WorkBuddy。
-3. 将connection.json放在员工自己的固定目录，独立于Skill安装目录和共享材料文件夹；升级Skill不会覆盖它。
-4. 在终端进入解压的Skill目录，运行：
+## 日常使用
 
-```sh
-python3 scripts/kb_upload.py --profile "/你的目录/connection.json" login
-python3 scripts/kb_upload.py --profile "/你的目录/connection.json" doctor
-```
+- “从ACC心得中找一个具体行动案例，保留过程并给出原文来源。”
+- “将这个文件夹按分类上传规范整理，先给我清单。”
+- “按刚才确认的清单上传到这个库，并检查正文检索。”
 
-Windows将`python3`替换成`py -3`，使用自己的Windows路径。邮箱和密码由本人在终端输入，密码不回显。不要把密码发在WorkBuddy对话里，也不要让助手替你输入。
+Agent会自动读取授权库列表。无需员工填写库UUID、安装Python、运行login或维护connection.json。
 
-脚本只向固定的SW HTTPS域名发送登录请求；不会保存密码或返回的租户API Key。短期个人会话存于本机用户目录`.sw-knowledge-upload/<配置路径摘要>/session.json`，受本机用户权限限制。不要打开、截屏、上传或同步这个目录。更换电脑需重新登录；到期出现401时再次login。需退出时运行同样命令，将login改为logout。
+首次上传先用一份已授权材料验证；批量执行前核对目标库。查询权限与上传权限独立。
 
-5. doctor应显示本人的用户ID、空间ID和配置的库名。只读成功还不代表有上传权限；首次用一份已授权的真实内部材料走完整流程，核对文件可见性与写入权限后再做批量。
+## 连接异常
 
-## 每次交给WorkBuddy的话
+- 401：令牌过期、撤销或填写错误。请管理员换发，然后更新连接。
+- 403或工具提示未授权：管理员调整对应库的read/write权限；不要尝试用管理员Key绕过。
+- 429：等待Retry-After或至少60秒，不反复并发调用。
+- 解析失败/上传不确定：保留材料编号和文档ID，避免换编号重复上传。
 
-```text
-使用SW知识库上传Skill。
-接入配置是：[我本机的connection.json路径]。
-把[材料文件或文件夹]按规范整理，保留完整案例和原文，上传到[接收库名称]。
-本次授权整理和新增上传，不替换现有资料。
-先展示文件数、目标库和待核项，然后继续执行上传与检索验证。
-不要读取或输出我的会话文件、密码和API Key；凭证只允许上传脚本内部使用。
-```
+令牌默认90天有效，泄露或离职可单独撤销。移除本机连接不会自动撤销服务器令牌，需要管理员执行撤销。
 
-WorkBuddy会创建一个独立批次目录，建议结构：
+官方配置说明：https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/MCP-Guide
+官方连接器格式：https://open.workbuddy.cn/docs/connector
 
-```text
-本次批次/
-  originals/           原件（不改动）
-  files/               整理后Markdown
-  batch.json           来源与目标清单
-  upload-plan.json     锁定文件指纹的上传计划
-  upload-state.json    上传ID、解析及检索进度
-  source-ledger.json   源段落去向/排除理由
-  review.md            问答抽测和待核项
-```
-
-原件、实名对应表和私密校对台账留本地；脚本只上传计划中明确的Markdown及最小来源元数据。由WorkBuddy读取原稿可能涉及该工具本身的云处理政策，按公司批准的材料范围使用，不因知识库“内部”就自动允许上传所有敏感资料。
-
-## 常见情况
-
-- **看不到库/403**：发给管理员库名、用户ID、错误码，不发密码。先整理本地资料，不换用管理员账号。
-- **401**：本人重新login；移动connection.json后，其配置路径对应的本机会话不同，也需重新登录。
-- **中断**：使用原upload-plan.json和upload-state.json恢复；别删进度重来。若显示post_pending但服务端找不到，先让管理员对账。若残留`.lock`，先确认上一次进程确已结束，再移除该锁，不能在进程仍运行时移除。
-- **同编号不同正文**：单独做换版计划，不能覆盖旧稿。新版用明确版本编号，旧稿是否移出检索由负责人处理。
-- **解析成功却只有摘要命中**：保留报告，标检索待复核。自动Summary不是正文；不要为了通过测试把摘要写回原稿。
-
-本机connection.json中的库清单是防误操作设置，不是安全权限边界。真正的权限由服务器执行。
-
-## 日常查询与取材
-
-除上传外，可以让WorkBuddy“在已配置的知识库查询某个问题并给出原文来源”。执行方法及引用规则见[查询与调用规范](query-guide.md)。查询只要求目标库可读，不能据此推断可上传。
+本版为自行添加的私有MCP连接，并未上架WorkBuddy连接器市场，也不是OAuth网页登录授权。

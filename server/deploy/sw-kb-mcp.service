@@ -1,0 +1,26 @@
+[Unit]
+Description=SW Knowledge MCP Gateway
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=swmcp
+Group=swmcp
+WorkingDirectory=/opt/sw-kb-mcp/app
+Environment=SW_MCP_DB=/opt/sw-kb-mcp/state/gateway.sqlite3
+Environment=SW_BACKEND_KEY_FILE=/opt/sw-kb-mcp/backend.key
+Environment=SW_BACKEND_URL=http://127.0.0.1:8080/api/v1
+ExecStart=/opt/sw-kb-mcp/venv/bin/python -m uvicorn server:app --host 172.18.0.1 --port 8643 --no-access-log
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/opt/sw-kb-mcp/state
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target

@@ -1,34 +1,17 @@
 # SW 知识库技能
 
-版本：1.1.0。适用于WorkBuddy等能执行本机Python脚本的桌面助手。
+版本：2.0.0。通过个人授权的MCP连接，让WorkBuddy等Agent整理上传、查询原文并引用知识库。员工不需要Python、终端login或connection.json。
 
-员工使用同一知识库网址，通过自己的账号连接，并上传到获准接收库。链路为：WorkBuddy → Skill内脚本 → SW AI HTTPS API → 员工接收库。无需MCP服务、服务器SSH或共享管理员Key。
+- [员工一次接入与日常使用](references/employee-guide.md)
+- [分类上传规范](references/content-standard.md)
+- [查询与引用规范](references/query-guide.md)
+- [管理员按库授权、调整和撤销](references/admin-guide.md)
+- [MCP配置示例（不含令牌）](assets/mcp.example.json)
 
-- [员工安装、登录与日常使用](references/employee-guide.md)
-- [管理员开通账号、库与权限验收](references/admin-guide.md)
-- [查询、调用与引用规范](references/query-guide.md)
-- [内容整理与测试标准](references/content-standard.md)
-- [Skill执行入口](SKILL.md)
+安装最新版Skill ZIP，再由管理员单独提供个人MCP连接。服务器地址统一为`https://ai.skillandwill.com/mcp`，Agent自动列出授权库。只查询不等于可上传。技能名称为「SW 知识库技能」，内部标识sw-knowledge-upload保持不变。
 
-按规范保留完整案例、原文与来源，先生成锁定指纹的计划，再按用户授权上传。脚本支持单批1–50份、逐文件解析等待、下载指纹核对、断点对账及正文/自动摘要分离的检索检查。不提供删除、覆盖、共享或模型配置功能。
+支持五个工具：列库、检索、读取文档、上传正文、查看解析状态。资料按类型整理，保留完整案例、原文、源件指纹和引用。上传幂等、解析完成后下载指纹校验，机构确认仍由业务负责人完成。
 
-运行环境：Python 3.10+，仅标准库。Windows使用`py -3`，macOS/Linux通常使用`python3`。网页登录的凭证不会自动传给Skill，需本人在终端隐藏输入密码一次；会话过期重新登录。
+源码与安装包：https://github.com/xuyuanpu/sw-knowledge-skill
 
-## 分发
-
-将同级的`sw-knowledge-upload-workbuddy-v1.1.0.zip`交给获准员工，由员工在WorkBuddy的技能页面上传启用。包不含connection.json、实际员工账号、JWT、API Key、源材料和服务器脚本。将assets中的接入配置示例复制到员工自己的固定目录，填写经管理员核对的库信息；不要修改示例后重新打包给所有人。
-
-`release-manifest.json`包含包内文件的SHA256。更新版本后重新验证包内容，员工自己的接入配置和本机会话不随Skill升级覆盖。
-
-## 当前验证范围
-
-- Skill格式校验通过。
-- 上传与查询工具16项模拟测试通过，覆盖重复上传、跨状态复用、源/稿变化、丢失响应后的恢复、不确定写入时停止、账号绑定、权限失败、独立查询的来源输出/无结果/未配置库拦截和Summary不得冒充正文。
-- 上传、认证与权限路由已按线上镜像revision核对；公开接口的无认证响应另有项目验证记录。
-- 尚未用员工个人账号完成真实登录上传，尚未在员工Windows/WorkBuddy环境安装验收；这些要在管理员分配账号与接收库后执行。不把单元测试当作生产员工链路通过。
-
-## GitHub 分发
-
-仓库：https://github.com/xuyuanpu/sw-knowledge-skill
-
-安装包见仓库 Releases。当前仓库为私有，访问者需获授 GitHub 仓库访问权限；也可由管理员直接分发 ZIP。GitHub 权限与知识库账号权限独立。为兼容已有安装与个人会话，内部标识继续使用 `sw-knowledge-upload`，中文名称统一为「SW 知识库技能」。
+v1个人网页登录脚本保留在历史Release中；v2默认不使用旧登录流程。Skill安装包只包含规范和无凭证配置示例，个人连接另行私密交付。此项目未提交WorkBuddy连接器市场审核，不声称市场已上架或所有员工已接通。

@@ -1,36 +1,45 @@
-# 管理员开通与交接
+# 管理员开通与撤销
 
-本版只提供员工侧Skill、上传工具和指南；不自动创建员工账号、分享现有库或修改服务器权限。员工名单和目标库尚未指定，不能声称链路已逐人开通。
+## 员工不再需要终端登录
 
-## 推荐路径
+v2通过独立SW MCP服务连接，知识库底层密钥仅存服务器。员工拿到的是单独生成、按库授权的个人MCP令牌，不是WeKnora管理API Key。Skill与连接配置分发两部分：公共安装包不含令牌，私密配置仅交给对应员工。
 
-1. 在SW AI为员工开通本人账号，按现有邀请/成员管理流程加入指定空间。按需授权，不发送管理员账号、租户API Key或SSH密钥。
-2. 本次核对的线上镜像为WeKnora v0.6.2，镜像revision为`fc98f000d86f1cca7d452bc21fee35d559e85556`。该revision文件上传路由同时挂载`OwnedKBOrAdmin`和`KBAccessWrite`。因此“可见/共享可编辑”不能单独证明上传可行；实际效果还取决于部署的RBAC配置与账户角色，必须实测。
-3. 优先让员工本人在获准空间中创建内部接收库，管理员协助配置既有模型和分块参数。这样材料先进入有明确负责人的内部接收库，业务核验后再由负责人规划正式归档。不要单纯为解决403授予全局管理员。
-4. 如果确需直接写现有正式库，由管理员核验服务器支持的最小权限方案，并用该员工账号实测。不支持时继续使用本人接收库，不靠本地白名单假装服务端隔离。本版不自动升级WeKnora、不改变RBAC开关、不建立共享服务账户。
-5. 将库ID、准确名称、空间ID写入connection.json交给员工。库ID可由管理页面链接或经授权API核对；不要让员工猜UUID。首次doctor核对身份、库名后，以一份获准材料完成端到端测试。
+接入地址：`https://ai.skillandwill.com/mcp`。首版为Bearer个人令牌授权，默认90天；不是OAuth。
 
-## 每个员工的验收记录
+## 开通步骤
 
-记录：员工标识、WorkBuddy和Python版本、Skill版本、工作空间ID、接收库ID、首次登录/只读/真实上传/下载校验/正文检索结果、未授权库的拒绝测试、日期和处理人。密码、JWT、API Key不写入记录。
+1. 确认员工代号及可读/可写库。write包含read；不设通配符权限。上传到哪一个现有库须经业务确认，不能因可查询就默认可上传。
+2. 在服务器创建仅管理员可读的grants.json：键为已核对库UUID，值为read或write。现有库发生新增不会自动加入员工权限。
+3. 管理员在服务器执行以下命令（通过项目受控SSH入口；员工不执行）：
 
-需要实际验证：员工能写入被分配接收库，未获准的库不能写入；不同账号是否可见同一库中的案例；禁用/撤销成员后旧会话还能否写入。当前没有使用真实员工凭证进行这些测试，脚本测试和路由检查不能替代。
+```sh
+/opt/sw-kb-mcp/venv/bin/python /opt/sw-kb-mcp/app/admin.py --db /opt/sw-kb-mcp/state/gateway.sqlite3 issue --label 员工代号 --grants /管理员私密目录/grants.json --days 90 --out /管理员私密目录/员工-mcp.json
+```
 
-接收库只是工作流命名，不自带隔离。页面里加“内部”也不是权限设置。对于目前既有试用库的共享状态，不应从过去报告推断此刻权限，开通时重新检查。
+命令只打印人员ID、标签和文件位置，不打印令牌。JSON配置文件含个人令牌，权限为600，通过公司认可的私密渠道只交给本人；不可提交GitHub或群发。
 
-## 分工
+4. 员工按[接入指南](employee-guide.md)添加连接。首次列库核对权限，再以一份已授权材料验证上传和正文检索。
+5. 管理员确认只读令牌不能上传、未授权库和跨库文档读取被拒绝。测试成功不是业务内容已审核。
 
-- 员工与WorkBuddy：来源整理、完整案例保留、编号化、按授权上传、保存结果与待核项。
-- 业务审核人：确认专业口径、案例使用范围、历史政策是否现行；判断回答有无角色混淆/条件强化。
-- 管理员：账号与接收库、模型配置、实际权限验收、跨库归档/换版和故障恢复。
+## 调整与撤销
 
-Skill不会自动发送消息、公布资料或把技术成功标成业务通过。需要从接收库归入正式库时，另行明确批次和替换关系，防止两个库重复命中相同内容。
+```sh
+# 查看ID、标签、权限及有效期（不显示令牌）
+/opt/sw-kb-mcp/venv/bin/python /opt/sw-kb-mcp/app/admin.py --db /opt/sw-kb-mcp/state/gateway.sqlite3 list
+# 更新范围，下一次调用生效
+/opt/sw-kb-mcp/venv/bin/python /opt/sw-kb-mcp/app/admin.py --db /opt/sw-kb-mcp/state/gateway.sqlite3 grant --id 人员ID --grants /管理员私密目录/grants.json
+# 撤销：后续请求拒绝；已经被后台接受的上传不会倒退删除
+/opt/sw-kb-mcp/venv/bin/python /opt/sw-kb-mcp/app/admin.py --db /opt/sw-kb-mcp/state/gateway.sqlite3 revoke --id 人员ID
+```
 
-## 接口核验依据
+换发流程：生成新连接、交给本人、撤销旧ID。服务器只保存令牌SHA256，不能查回原始令牌。人员名单和权限未明确时，不预先生成通用全员令牌。
 
-- [运行镜像对应上传路由源码](https://github.com/Tencent/WeKnora/blob/fc98f000d86f1cca7d452bc21fee35d559e85556/internal/router/router.go)
-- [同revision个人Bearer认证](https://github.com/Tencent/WeKnora/blob/fc98f000d86f1cca7d452bc21fee35d559e85556/internal/middleware/auth.go)
-- [同revision登录与空间切换](https://github.com/Tencent/WeKnora/blob/fc98f000d86f1cca7d452bc21fee35d559e85556/internal/handler/auth.go)
-- [WorkBuddy企业Skill分发](https://www.codebuddy.cn/docs/enterprise/adminguide/Skill%E7%AE%A1%E7%90%86)
+## 运维与验收
 
-本版直接调用HTTPS API，不要求部署额外MCP服务器。若未来希望免终端登录，需要另做个人身份授权连接器；本包没有把它描述为现成能力。
+服务`sw-kb-mcp.service`，状态及审计库`/opt/sw-kb-mcp/state/gateway.sqlite3`，底层密钥`/opt/sw-kb-mcp/backend.key`。应用仅监听Docker桥接地址172.18.0.1:8643，由现有HTTPS反代访问；不新增公网端口。审计记录人员ID、动作、库/文档ID和结果，不记录正文、问题或令牌。
+
+备份SQLite应使用在线backup或停服后复制。故障恢复同时保留uploads表，不能丢掉待对账记录后重发资料。上游密钥轮换需更新服务器文件并重启服务；个人权限和撤销无需重启。服务源码与详细部署记录在GitHub仓库server/及本地项目services/sw-kb-mcp。
+
+## 已知边界
+
+MCP凭证代表个人连接，不冒充WeKnora网页用户。Agent列库、上传、检索权限由本服务独立校验，底层管理API Key不会下发。上传接受整理后的Markdown正文及来源信息，不接受任意URL或服务器文件路径；来源指纹由员工Agent计算，服务端不能据此证明未收到的源件内容真实。

@@ -1,0 +1,182 @@
+[
+  {
+    "package": "annotated-types==0.8.0",
+    "file": "annotated_types-0.8.0-py3-none-any.whl",
+    "sha256": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0",
+    "size": 13427
+  },
+  {
+    "package": "anyio==4.15.1",
+    "file": "anyio-4.15.1-py3-none-any.whl",
+    "sha256": "6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101",
+    "size": 132079
+  },
+  {
+    "package": "attrs==26.1.0",
+    "file": "attrs-26.1.0-py3-none-any.whl",
+    "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+    "size": 67548
+  },
+  {
+    "package": "certifi==2026.7.22",
+    "file": "certifi-2026.7.22-py3-none-any.whl",
+    "sha256": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775",
+    "size": 136983
+  },
+  {
+    "package": "cffi==2.1.1",
+    "file": "cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+    "sha256": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf",
+    "size": 221822
+  },
+  {
+    "package": "click==8.5.0",
+    "file": "click-8.5.0-py3-none-any.whl",
+    "sha256": "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360",
+    "size": 125251
+  },
+  {
+    "package": "cryptography==50.0.1",
+    "file": "cryptography-50.0.1-cp311-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+    "sha256": "ff838d62ec1bfce4f9ba7fa16f4a7b554cd8d0c299e6be37502161a660c84eef",
+    "size": 4712478
+  },
+  {
+    "package": "h11==0.16.0",
+    "file": "h11-0.16.0-py3-none-any.whl",
+    "sha256": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86",
+    "size": 37515
+  },
+  {
+    "package": "httpcore==1.0.9",
+    "file": "httpcore-1.0.9-py3-none-any.whl",
+    "sha256": "2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55",
+    "size": 78784
+  },
+  {
+    "package": "httpx==0.28.1",
+    "file": "httpx-0.28.1-py3-none-any.whl",
+    "sha256": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad",
+    "size": 73517
+  },
+  {
+    "package": "httpx-sse==0.4.3",
+    "file": "httpx_sse-0.4.3-py3-none-any.whl",
+    "sha256": "0ac1c9fe3c0afad2e0ebb25a934a59f4c7823b60792691f779fad2c5568830fc",
+    "size": 8960
+  },
+  {
+    "package": "idna==3.20",
+    "file": "idna-3.20-py3-none-any.whl",
+    "sha256": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c",
+    "size": 69583
+  },
+  {
+    "package": "jsonschema==4.26.0",
+    "file": "jsonschema-4.26.0-py3-none-any.whl",
+    "sha256": "d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce",
+    "size": 90630
+  },
+  {
+    "package": "jsonschema-specifications==2025.9.1",
+    "file": "jsonschema_specifications-2025.9.1-py3-none-any.whl",
+    "sha256": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
+    "size": 18437
+  },
+  {
+    "package": "mcp==1.30.0",
+    "file": "mcp-1.30.0-py3-none-any.whl",
+    "sha256": "666edb5009503e1047c9d60346a756f94b261f05cc2625f23d41c728ffc484d0",
+    "size": 234581
+  },
+  {
+    "package": "packaging==26.3",
+    "file": "packaging-26.3-py3-none-any.whl",
+    "sha256": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c",
+    "size": 129956
+  },
+  {
+    "package": "pycparser==3.0",
+    "file": "pycparser-3.0-py3-none-any.whl",
+    "sha256": "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992",
+    "size": 48172
+  },
+  {
+    "package": "pydantic==2.13.5",
+    "file": "pydantic-2.13.5-py3-none-any.whl",
+    "sha256": "346a034f080da3755d8e9cb5e00e8b07de1d39e4f6e2c87d8ab7cafa0b269a73",
+    "size": 472589
+  },
+  {
+    "package": "pydantic-core==2.46.5",
+    "file": "pydantic_core-2.46.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "sha256": "0fc5be0abd4a407e200d844b404e33639a554e7bd0d448e7b9ae181be4789ac2",
+    "size": 2066284
+  },
+  {
+    "package": "pydantic-settings==2.15.0",
+    "file": "pydantic_settings-2.15.0-py3-none-any.whl",
+    "sha256": "0ba092c291c94baceb5eff768aa0d56400a457585bc0175925a5a5510303da42",
+    "size": 69413
+  },
+  {
+    "package": "pyjwt==2.14.0",
+    "file": "pyjwt-2.14.0-py3-none-any.whl",
+    "sha256": "ad0cef71c756a56e74863c2919cf0985f72decbcfcb550ee2f422e7c62b5eedc",
+    "size": 32896
+  },
+  {
+    "package": "python-dotenv==1.2.3",
+    "file": "python_dotenv-1.2.3-py3-none-any.whl",
+    "sha256": "904552145e8bfed22162c09dab1c2b9b54fefa7b23ba780f4f26ca0316b0f0d9",
+    "size": 22780
+  },
+  {
+    "package": "python-multipart==0.0.32",
+    "file": "python_multipart-0.0.32-py3-none-any.whl",
+    "sha256": "ff6d3f776f16878c894e52e107296ffc890e913c611b1a4ec6c44e2821fe2e23",
+    "size": 30042
+  },
+  {
+    "package": "referencing==0.37.0",
+    "file": "referencing-0.37.0-py3-none-any.whl",
+    "sha256": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
+    "size": 26766
+  },
+  {
+    "package": "rpds-py==2026.6.3",
+    "file": "rpds_py-2026.6.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "sha256": "ecabd69db66de867690f9797f2f8fa27ba501bbc24540cbdbdc649cd15888ba6",
+    "size": 366189
+  },
+  {
+    "package": "sse-starlette==3.4.11",
+    "file": "sse_starlette-3.4.11-py3-none-any.whl",
+    "sha256": "c7b2244bdff016fe7f64e10075e89a3e6bbf899649cc89b0fe884b5545042453",
+    "size": 17122
+  },
+  {
+    "package": "starlette==1.6.0",
+    "file": "starlette-1.6.0-py3-none-any.whl",
+    "sha256": "a86dd39d14bb45f85a3d18525215a9ef0cfd1f192ac793220e72598c90335f0c",
+    "size": 75969
+  },
+  {
+    "package": "typing-extensions==4.16.0",
+    "file": "typing_extensions-4.16.0-py3-none-any.whl",
+    "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+    "size": 45571
+  },
+  {
+    "package": "typing-inspection==0.4.4",
+    "file": "typing_inspection-0.4.4-py3-none-any.whl",
+    "sha256": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147",
+    "size": 14750
+  },
+  {
+    "package": "uvicorn==0.53.0",
+    "file": "uvicorn-0.53.0-py3-none-any.whl",
+    "sha256": "e8dca71ec86dce5f04e333f0d56cdedf942446e6643b9cea1af0d6d3a02cb03e",
+    "size": 87081
+  }
+]

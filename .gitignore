@@ -1,5 +1,11 @@
 __pycache__/
 *.pyc
+.venv/
+.pytest_cache/
+state/
+private/
+*.sqlite3*
+backend.key
 connection.json
 session.json
 .env
