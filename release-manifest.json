@@ -1,0 +1,16 @@
+{
+  "name": "sw-knowledge-upload",
+  "display_name": "SW 知识库技能",
+  "version": "1.1.0",
+  "files": {
+    "README.md": "631f160ec764b01dde40ebc57a28e6bab83a7d0245ebe9c806354efd393fe8a7",
+    "SKILL.md": "1177988c4a1c3f38b4c0ae05e39b838b402171cd4c64afa59f07a7a718d42bb8",
+    "assets/batch.example.json": "4e4bb5286128a2240b494c1b9850c28f4f62b85184416b25c99c04dc2be583be",
+    "assets/connection.example.json": "59e565ce47d9ce17af34eed6ac20e5e5e2e52113626f0369c7b4ecae08dda5df",
+    "references/admin-guide.md": "1758684e3cb3d5531a38664f932bd1a09b3d8ed0eee3211a4ce444bb139212f2",
+    "references/content-standard.md": "7fd15cfc158d25454bd97a80a0298f895776480e150178e0937d6451f64c1d16",
+    "references/employee-guide.md": "97347e6713503ef804a1349af21b5768fd012c941bf2bbff4770402e84bb645d",
+    "references/query-guide.md": "c8e196b95c4598706f8705e1817a1d663bc5b04e50cc28b07fe39f0e73c7ad87",
+    "scripts/kb_upload.py": "a2af31375048614167d46fa8fa5902aceec67b0ffc9682b95119e90d75d76410"
+  }
+}

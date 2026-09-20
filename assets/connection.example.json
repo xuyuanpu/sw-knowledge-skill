@@ -1,0 +1,6 @@
+{
+  "tenant_id": null,
+  "knowledge_bases": [
+    {"id": "由管理员核对后填写UUID", "name": "员工本人接收库名称"}
+  ]
+}
