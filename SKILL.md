@@ -1,11 +1,15 @@
 ---
 name: sw-knowledge-upload
-description: SW 知识库技能。通过已授权的 SW MCP 连接分类整理并上传资料，查询知识库、读取原文、核对案例并带来源调用。适用于 WorkBuddy 等支持 MCP 的 Agent；保留完整原文与来源，不负责对外发布或服务器管理。
+description: SW 知识库技能。通过已授权的 SW MCP 连接分类整理并上传资料，查询知识库、读取原文、核对案例并带来源调用。支持从固定GitHub正式Release安装或更新自身。适用于 WorkBuddy 等支持 MCP 的 Agent；保留完整原文与来源，不负责对外发布或服务器管理。
 ---
 
 # SW 知识库技能
 
-版本：2.0.0。以 MCP 为默认接入方式，员工不需要 Python、终端登录、知识库网页账号或 connection.json。内部标识沿用 sw-knowledge-upload，避免重复安装。
+版本：2.1.0。以 MCP 为默认接入方式，员工不需要 Python、终端登录、知识库网页账号或 connection.json。内部标识沿用 sw-knowledge-upload，避免重复安装。
+
+## 在线安装与更新
+
+用户要求安装、检查版本或更新本Skill时，读取[在线更新规范](references/update-guide.md)，从固定仓库最新正式Release安装或更新，校验ZIP和逐文件指纹，备份旧版并保留个人MCP配置。普通知识库任务不自动更新。
 
 ## 连接与身份
 

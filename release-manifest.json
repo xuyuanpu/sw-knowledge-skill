@@ -1,15 +1,17 @@
 {
   "name": "sw-knowledge-upload",
   "display_name": "SW 知识库技能",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "transport": "MCP Streamable HTTP",
+  "update_repository": "https://github.com/xuyuanpu/sw-knowledge-skill",
   "files": {
-    "README.md": "e638352f0d6bed787caea317e88a641a0eefa0a67471e0ffd10af1b312b8c80a",
-    "SKILL.md": "5c28b6b50e44e8d34d44aceee51b8bc931e0ee843f196d060b43411dd363dbd9",
+    "README.md": "836469400077bb7e5f1bd888c5a2d36f627f1e5344c26022c999f5c3e430d94f",
+    "SKILL.md": "70112d99cc553b8c5d90ab284184f9ecf9f1f0f8e14e70749584e31abd389ed4",
     "assets/mcp.example.json": "623fdfa7106727cd0a611628436f3964067e859de0927ccaada961843960edae",
     "references/admin-guide.md": "bd3deeea3b7f31bd28e045e5ab600655cb74dcfd4dd255dec4c6523ee518e891",
     "references/content-standard.md": "7e064251641873d39af0d272b5f567be50487a1c7f23a99c7eb4562e67d2b098",
-    "references/employee-guide.md": "fe1ae6c31ddbe2668e255578f075b8a754f5fa74cbb6c2a3ec39436a97f52b67",
-    "references/query-guide.md": "a1db4bab9221769131bf9fabae8fe893a7a5aae2840d463799808e324bcc63c5"
+    "references/employee-guide.md": "78decb35a38e881b8c935a171a2fabf0ee704a5babf3e707163ea9d98ee0de82",
+    "references/query-guide.md": "a1db4bab9221769131bf9fabae8fe893a7a5aae2840d463799808e324bcc63c5",
+    "references/update-guide.md": "56cdba3748a9872b62856d225542de6340b3ceb8fcf557484c47f5520f50edb7"
   }
 }

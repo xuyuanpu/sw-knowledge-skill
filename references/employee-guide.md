@@ -2,7 +2,7 @@
 
 ## 一次配置，之后直接说需求
 
-安装「SW 知识库技能」v2.0.0。再由管理员提供你的个人 MCP 连接令牌，或只属于你的私密连接配置文件。各员工使用独立令牌，不共用负责人连接。
+安装「SW 知识库技能」v2.1.0。再由管理员提供你的个人 MCP 连接令牌，或只属于你的私密连接配置文件。各员工使用独立令牌，不共用负责人连接。
 
 在 WorkBuddy 的「插件 → MCP服务器 → 配置MCP」添加远程 Streamable HTTP 服务：
 
@@ -43,3 +43,7 @@ Agent会自动读取授权库列表。无需员工填写库UUID、安装Python�
 官方连接器格式：https://open.workbuddy.cn/docs/connector
 
 本版为自行添加的私有MCP连接，并未上架WorkBuddy连接器市场，也不是OAuth网页登录授权。
+
+## 后续升级
+
+对WorkBuddy说“检查并更新SW知识库技能，保留个人MCP连接”。无需重新收取安装包，执行[在线更新规范](update-guide.md)。从旧版首次升级时同时提供 https://github.com/xuyuanpu/sw-knowledge-skill 。
