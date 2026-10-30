@@ -1,7 +1,7 @@
 """Administrator-only local provisioning. Secrets are written to private files, never printed."""
 import argparse,json,os,time
 from pathlib import Path
-from core import Store,Failure
+from core import Store,Failure,validate_grants
 p=argparse.ArgumentParser();p.add_argument('--db',required=True);sp=p.add_subparsers(dest='cmd',required=True)
 a=sp.add_parser('issue');a.add_argument('--label',required=True);a.add_argument('--grants',required=True);a.add_argument('--days',type=int,default=90);a.add_argument('--out',required=True)
 a=sp.add_parser('revoke');a.add_argument('--id',required=True)
@@ -21,11 +21,8 @@ elif args.cmd=='revoke':
     with store.db() as db:r=db.execute('UPDATE principals SET active=0 WHERE id=?',(args.id,))
     print(json.dumps({'revoked':r.rowcount}))
 elif args.cmd=='grant':
-    from core import uid
     grants=json.loads(Path(args.grants).read_text())
-    for kb,permission in grants.items():
-        uid(kb)
-        if permission not in ('read','write'):raise Failure('权限无效')
+    validate_grants(grants)
     with store.db() as db:r=db.execute('UPDATE principals SET grants=? WHERE id=?',(json.dumps(grants),args.id))
     print(json.dumps({'updated':r.rowcount}))
 else:

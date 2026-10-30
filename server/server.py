@@ -1,4 +1,4 @@
-"""SW knowledge MCP. No employee passwords and no administrative tools."""
+"""SW knowledge MCP. Personal grants with scoped knowledge management."""
 import logging
 import asyncio
 import os
@@ -41,7 +41,7 @@ async def invoke(action,kb='',document='',**kw):
 
 @mcp.tool(annotations=READ)
 async def sw_list_knowledge_bases()->dict:
-    """列出当前个人连接获授权的库及read/write权限；不需要员工手填库UUID。"""
+    """列出当前个人连接获授权的库及read/write/manage权限；不需要员工手填库UUID。"""
     return await invoke('libraries')
 
 @mcp.tool(annotations=READ)
@@ -62,13 +62,49 @@ class Source(BaseModel):
 
 @mcp.tool(annotations=WRITE)
 async def sw_upload_document(knowledge_base_id:KB,material_id:Annotated[str,Field(pattern=r'^[A-Za-z0-9_-]{3,80}$')],title:Annotated[str,Field(min_length=1,max_length=200)],content:Annotated[str,Field(min_length=50,max_length=200000)],sources:Annotated[list[Source],Field(min_length=1,max_length=20)])->dict:
-    """上传已授权的整理稿正文（非本机路径）。必须有概览、重点索引、完整原文、来源说明；同库同材料编号幂等，不覆盖旧稿。来源SHA256由本机计算，业务状态保持待核。"""
+    """上传已授权的整理稿正文（非本机路径）。普通材料必须有概览、重点索引、完整原文、来源说明；Hermes专用待审库的SW-TOPIC选题可用完整八项卡及三层依据/待审边界。同库同材料编号幂等，不覆盖旧稿。来源SHA256由本机计算，业务状态保持待核。"""
     return await invoke('upload',kb=knowledge_base_id,material=material_id,title=title,content=content,sources=[s.model_dump() for s in sources])
 
 @mcp.tool(annotations=READ)
 async def sw_get_upload_status(knowledge_base_id:KB,document_id:DOC)->dict:
     """检查解析状态。completed后仍须正文检索与业务核对；不持续自动轮询。"""
     return await invoke('status',kb=knowledge_base_id,document=document_id)
+
+MANAGE={**WRITE,'destructiveHint':True,'idempotentHint':False}
+@mcp.tool(annotations=READ)
+async def sw_list_documents(knowledge_base_id:KB,page:Annotated[int,Field(ge=1,le=10000)]=1)->dict:
+    """分页列出授权库文档ID、当前标题与解析状态，每页20条。"""
+    return await invoke('documents',kb=knowledge_base_id,page=page)
+
+@mcp.tool(annotations=WRITE)
+async def sw_create_knowledge_base(template_knowledge_base_id:KB,name:Annotated[str,Field(min_length=1,max_length=200)],description:Annotated[str,Field(max_length=2000)],request_id:Annotated[str,Field(pattern=r'^[A-Za-z0-9_-]{3,80}$')])->dict:
+    """需要空间manage权限；按已有库的模型和分块配置创建文档库，禁用额外多模态费用。同一request_id幂等；结果不确定时禁止换编号重试。"""
+    return await invoke('create_library',kb=template_knowledge_base_id,name=name,description=description,request_id=request_id)
+
+@mcp.tool(annotations=MANAGE)
+async def sw_update_knowledge_base(knowledge_base_id:KB,name:Annotated[str,Field(min_length=1,max_length=200)],description:Annotated[str,Field(max_length=2000)])->dict:
+    """需要manage；修改库名与描述。传完整期望值，空描述会清空描述。"""
+    return await invoke('update_library',kb=knowledge_base_id,name=name,description=description)
+
+@mcp.tool(annotations=MANAGE)
+async def sw_delete_knowledge_base(knowledge_base_id:KB,confirm_name:str)->dict:
+    """需要manage；删除整个库及全部资料，仅在用户明确授权删除此库时调用。confirm_name须与当前库名完全一致；不是回收站。"""
+    return await invoke('delete_library',kb=knowledge_base_id,confirm_name=confirm_name)
+
+@mcp.tool(annotations=MANAGE)
+async def sw_update_document(knowledge_base_id:KB,document_id:DOC,title:Annotated[str,Field(min_length=1,max_length=200)])->dict:
+    """需要manage；修改已有文档标题。修改正文应先上传新版，验收后用sw_replace_document换版。"""
+    return await invoke('update_document',kb=knowledge_base_id,document=document_id,title=title)
+
+@mcp.tool(annotations=MANAGE)
+async def sw_delete_document(knowledge_base_id:KB,document_id:DOC,confirm_title:str)->dict:
+    """需要manage；删除指定文档。须获用户对该资料的删除授权并传当前准确标题。结果不确定时先列文档对账。"""
+    return await invoke('delete_document',kb=knowledge_base_id,document=document_id,confirm_title=confirm_title)
+
+@mcp.tool(annotations=MANAGE)
+async def sw_replace_document(knowledge_base_id:KB,document_id:DOC,replacement_document_id:DOC,confirm_title:str)->dict:
+    """需要manage及用户换版授权。先按规范用新版本材料编号上传完整修订稿、核对正文。新版解析及下载指纹通过后，才删除指定旧文档。新旧ID不同且在同库；旧版标题须准确。"""
+    return await invoke('replace_document',kb=knowledge_base_id,document=document_id,replacement_document_id=replacement_document_id,confirm_title=confirm_title)
 
 class Guard:
     def __init__(self,app): self.app=app;self.calls=defaultdict(deque)
